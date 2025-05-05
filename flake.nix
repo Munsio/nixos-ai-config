@@ -32,7 +32,7 @@
         example = mkSystem {
           hostname = "example";
           users = [ "example-user" ];
-          extraModules = ./modules/default.nix;
+          extraModules = [ ];
         };
       };
 

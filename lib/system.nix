@@ -20,9 +20,6 @@
         # Host-specific configuration
         ../hosts/${hostname}/default.nix
 
-        # Extra modules if needed
-        extraModules
-
         # Home-manager configuration
         {
           home-manager = {
@@ -40,6 +37,6 @@
               in import userDefault);
           };
         }
-      ];
+      ] ++ extraModules;
     };
 }
