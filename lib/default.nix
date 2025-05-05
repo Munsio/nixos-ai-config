@@ -1,4 +1,4 @@
-{ lib, nixpkgs, home-manager, inputs }:
+{ lib, nixpkgs ? null, home-manager ? null, inputs ? null }:
 
 let
   # Import system utilities
