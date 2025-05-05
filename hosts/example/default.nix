@@ -1,4 +1,4 @@
-{ pkgs, hostname, ... }:
+{ pkgs, hostname, inputs, ... }:
 
 {
   # Host-specific configuration for 'example'
@@ -30,10 +30,10 @@
   # Enable NixOS modules using nixModules
   nixModules = {
     # Enable features
-    cli-tools = true;
+    cli-tools = false;
 
     # Enable bundles
-    bundles.development = false;
+    bundles.development = true;
 
     # Enable services
     services.ssh = false;

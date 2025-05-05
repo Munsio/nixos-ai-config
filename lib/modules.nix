@@ -1,6 +1,11 @@
 { lib, pkgs, ... }:
 
 let
+  # Define module types
+  moduleTypes = {
+    nix = "nixModules";
+    home = "homeModules";
+  };
   # Function to import all Nix files from a directory
   importDir = dir:
     let
@@ -34,52 +39,59 @@ let
     in modules // nestedModules;
 
   # Function to create a module with enable option
-  mkModule = { name, description, module }:
+  mkModule = { name, description, module, type ? moduleTypes.nix }:
     { config, lib, ... }: {
-      options.nixModules.${name} = lib.mkOption {
+      options.${type}.${name} = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = description;
       };
 
-      config = lib.mkIf config.nixModules.${name} module;
+      config = lib.mkIf config.${type}.${name} module;
     };
 
   # Function to create modules from a directory
-  mkModulesFromDir = { dir, description }:
+  mkModulesFromDir = { dir, description, type ? moduleTypes.nix }:
     let
       modules = importDir dir;
 
-      # Convert each module to a proper NixOS module with enable option
+      # Convert each module to a proper module with enable option
       modulesList = lib.mapAttrsToList (name: module:
         mkModule {
           inherit name;
           inherit description;
           inherit module;
+          inherit type;
         }) modules;
     in modulesList;
 in {
-  # Function to create the nixModules system
-  mkModuleSystem = { featuresDir, bundlesDir, servicesDir }:
+  inherit moduleTypes;
+
+  # Function to create a module system (nixModules or homeModules)
+  mkModuleSystem =
+    { featuresDir, bundlesDir, servicesDir, type ? moduleTypes.nix }:
     let
       # Import modules from each directory
       featureModules = mkModulesFromDir {
         dir = featuresDir;
         description = "Enable this feature";
+        inherit type;
       };
 
       bundleModules = mkModulesFromDir {
         dir = bundlesDir;
         description = "Enable this bundle";
+        inherit type;
       };
 
       serviceModules = mkModulesFromDir {
         dir = servicesDir;
         description = "Enable this service";
+        inherit type;
       };
-      # Base module that sets up the nixModules option
+      # Base module that sets up the module options
     in { config, lib, ... }: {
-      options.nixModules = {
+      options.${type} = {
         features = lib.mkOption {
           type = lib.types.attrsOf lib.types.bool;
           default = { };
