@@ -27,26 +27,14 @@
     fsType = "ext4";
   };
 
-  # Import NixOS modules
-  imports = [
-    ../../modules/features/example.nix
-    ../../modules/bundles/example/default.nix
-  ];
+  # # Enable NixOS modules using nixModules
+  # nixModules = {
+  #   # Enable features
+  #   example = true;
 
-  # Home-manager configuration for all users on this host
-  home-manager.sharedModules = [
-    # This module will be imported for all users on this host
-    ({ pkgs, ... }: {
-      # Import home-manager modules
-      imports = [
-        ../../home-modules/features/example.nix
-        ../../home-modules/bundles/example/default.nix
-      ];
-
-      # Common home-manager configuration for all users on this host
-      home.packages = with pkgs; [ firefox ripgrep ];
-    })
-  ];
+  #   # Enable bundles
+  #   bundles.example = true;
+  # };
 
   # System-specific packages
   environment.systemPackages = with pkgs;
@@ -75,15 +63,4 @@
     # Example: Enable graphics
     graphics.enable = true;
   };
-
-  # User configuration
-  users.users.example-user = {
-    isNormalUser = true;
-    description = "Example User";
-    extraGroups = [ "wheel" "networkmanager" ];
-    group = "example-user";
-  };
-
-  # Create a group for the user
-  users.groups.example-user = { };
 }

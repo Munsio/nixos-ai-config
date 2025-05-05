@@ -1,14 +1,7 @@
 {
   description = "NixOS configuration with flakes and home-manager";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+  inputs = { nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; };
 
   outputs = { nixpkgs, home-manager, ... }@inputs:
     let
@@ -21,8 +14,7 @@
       forAllSystems = lib.genAttrs supportedSystems;
 
       # Import the system builder function
-      systemLib =
-        import ./lib/system.nix { inherit lib nixpkgs home-manager inputs; };
+      systemLib = import ./lib/system.nix { inherit lib inputs; };
       inherit (systemLib) mkSystem;
 
     in {
@@ -32,7 +24,6 @@
         example = mkSystem {
           hostname = "example";
           users = [ "example-user" ];
-          extraModules = [ ];
         };
       };
 
