@@ -1,0 +1,19 @@
+# Nix build outputs
+result
+result-*
+
+# Direnv
+.direnv/
+
+# Nix flake lockfile (optional, some prefer to commit this)
+# flake.lock
+
+# Editor-specific files
+.vscode/
+.idea/
+*.swp
+*~
+
+# System files
+.DS_Store
+Thumbs.db
