@@ -33,10 +33,10 @@
     cli-tools = true;
 
     # Enable bundles
-    bundles.development = true;
+    bundles.development = false;
 
     # Enable services
-    services.ssh = true;
+    services.ssh = false;
   };
 
   # System-specific packages

@@ -11,6 +11,12 @@ in {
       pkgs = inputs.nixpkgs.legacyPackages.${system};
       moduleLib = import ./modules.nix { inherit lib pkgs; };
       inherit (moduleLib) mkModuleSystem;
+
+      # Generate user modules if users are specified
+      userModules = if users != [ ] then
+        map (user: ../users/${user}/default.nix) users
+      else
+        [ ];
     in lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -30,6 +36,6 @@ in {
           bundlesDir = ../modules/bundles;
           servicesDir = ../modules/services;
         })
-      ] ++ extraModules;
+      ] ++ userModules ++ extraModules;
     };
 }
