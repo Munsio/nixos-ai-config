@@ -10,9 +10,9 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs:
+  outputs = { nixpkgs, home-manager, ... }@inputs:
     let
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib;
 
       # Import utility functions
       utils = import ./lib { inherit lib nixpkgs home-manager inputs; };
@@ -45,8 +45,18 @@
       devShells = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
         in {
-          default =
-            pkgs.mkShell { buildInputs = with pkgs; [ nixpkgs-fmt nil ]; };
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              # Nix language server
+              nil
+
+              # Nix formatting and linting tools
+              nixpkgs-fmt # Formatter
+              statix # Linter for suggestions
+              deadnix # Find unused code
+              # nix-linter is currently marked as broken in nixpkgs
+            ];
+          };
         });
     };
 }

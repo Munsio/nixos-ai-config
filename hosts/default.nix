@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, hostname, systemUsers, ... }:
+{ lib, pkgs, ... }:
 
 {
   # Common configuration for all hosts

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, hostname, systemUsers, ... }:
+{ pkgs, hostname, ... }:
 
 {
   # Host-specific configuration for 'example'
@@ -37,7 +37,7 @@
   # Home-manager configuration for all users on this host
   home-manager.sharedModules = [
     # This module will be imported for all users on this host
-    ({ config, lib, pkgs, homeModules, ... }: {
+    ({ pkgs, homeModules, ... }: {
       # Enable specific home-manager modules for all users on this host
       homeModules = {
         # Enable feature modules (at root level)

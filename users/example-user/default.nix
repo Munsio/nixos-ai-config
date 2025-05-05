@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, hostname, homeModules, ... }:
+{ pkgs, homeModules, ... }:
 
 {
   # Import home-modules

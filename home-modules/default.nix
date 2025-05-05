@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 let
   utils = import ../lib {
@@ -13,7 +13,6 @@ let
     let
       # Get all directories in the category directory
       categoryDir = ./. + "/${category}";
-      categoryDirStr = builtins.toString categoryDir;
 
       # Check if the category directory exists
       categoryExists = builtins.pathExists categoryDir;
@@ -24,7 +23,7 @@ let
 
       # Filter out non-directories
       moduleDirs =
-        lib.filterAttrs (name: type: type == "directory") categoryContents;
+        lib.filterAttrs (_: type: type == "directory") categoryContents;
 
       # Import each module directory and wrap it with utils.mkHomeModule
       # For features, use the name directly
@@ -54,7 +53,7 @@ let
   allModules = featureModules ++ bundleModules ++ serviceModules;
 
   # Create a merged module from all the imported modules
-  modulesModule = { config, lib, pkgs, ... }: {
+  modulesModule = { lib, ... }: {
     imports = allModules;
 
     # Add options structure for homeModules

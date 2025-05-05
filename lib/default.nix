@@ -6,8 +6,8 @@ let
     import ./system.nix { inherit lib nixpkgs home-manager inputs; };
 
   # Function to create a module with standard options and config pattern
-  mkModule = { name, description ? "Enable the ${name} module"
-    , extraOptions ? { }, extraConfig ? { } }:
+  mkModule =
+    { name, description ? "Enable the ${name} module", extraConfig ? { } }:
     { config, lib, pkgs, ... }:
     let
       # Parse the name to handle category.module format
@@ -35,13 +35,13 @@ let
         nixModules.${category}.${moduleName} = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = description;
+          inherit description;
         };
       } else {
         nixModules.${name} = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = description;
+          inherit description;
         };
       };
 
@@ -51,7 +51,7 @@ let
 
   # Function to create a home-manager module with standard options and config pattern
   mkHomeModule = { name, description ? "Enable the ${name} home-manager module"
-    , extraOptions ? { }, extraConfig ? { } }:
+    , extraConfig ? { } }:
     { config, lib, pkgs, ... }:
     let
       # Parse the name to handle category.module format
@@ -79,13 +79,13 @@ let
         homeModules.${category}.${moduleName} = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = description;
+          inherit description;
         };
       } else {
         homeModules.${name} = lib.mkOption {
           type = lib.types.bool;
           default = false;
-          description = description;
+          inherit description;
         };
       };
 

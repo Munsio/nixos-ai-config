@@ -1,4 +1,4 @@
-{ lib, nixpkgs, home-manager, inputs }:
+{ lib, home-manager, inputs }:
 
 {
   # Function to create a NixOS system configuration for a specific host
@@ -28,21 +28,23 @@
 
         # Home-manager configuration
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit inputs hostname;
-            homeModules = import ./home-modules;
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = {
+              inherit inputs hostname;
+              homeModules = import ./home-modules;
+            };
+            users = lib.genAttrs users (user:
+              let
+                userPath = ./users/${user};
+                userDefault =
+                  if builtins.pathExists (userPath + "/default.nix") then
+                    userPath + "/default.nix"
+                  else
+                    ./users/${user}.nix;
+              in import userDefault);
           };
-          home-manager.users = lib.genAttrs users (user:
-            let
-              userPath = ./users/${user};
-              userDefault =
-                if builtins.pathExists (userPath + "/default.nix") then
-                  userPath + "/default.nix"
-                else
-                  ./users/${user}.nix;
-            in import userDefault);
         }
       ];
     };

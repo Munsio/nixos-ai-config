@@ -240,6 +240,36 @@ Each user can have their own home-manager configuration in `users/<username>/def
 
 Both NixOS and home-manager modules can be enabled at the host or user level. Host-level module settings apply to all users on that host, while user-level settings can override or extend host-level settings.
 
+## CI/CD
+
+This repository includes GitHub Actions workflows for continuous integration:
+
+### Nix Linting
+
+The `.github/workflows/nix-lint.yml` workflow runs on push to main/master branches and on pull requests. It performs the following checks:
+
+- **nixpkgs-fmt**: Checks Nix code formatting
+- **statix**: Lints Nix code and suggests improvements
+- **deadnix**: Finds unused code in Nix files
+
+These tools help maintain code quality and consistency across the codebase.
+
+To run these checks locally:
+
+```bash
+# Format Nix files
+nix-shell -p nixpkgs-fmt --run "nixpkgs-fmt ."
+
+# Run statix linter
+nix-shell -p statix --run "statix check ."
+
+# Find unused code
+nix-shell -p deadnix --run "deadnix ."
+
+# nix-linter is currently marked as broken in nixpkgs
+# nix-shell -p nix-linter --run "find . -name '*.nix' -type f | xargs nix-linter"
+```
+
 ## About This Configuration
 
 This NixOS configuration was created with [Cline](https://github.com/cline-ai/cline) and Claude-3.7-sonnet as an experiment for vibe coding. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).

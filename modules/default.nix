@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 let
   utils = import ../lib {
@@ -13,7 +13,6 @@ let
     let
       # Get all directories in the category directory
       categoryDir = ./. + "/${category}";
-      categoryDirStr = builtins.toString categoryDir;
 
       # Check if the category directory exists
       categoryExists = builtins.pathExists categoryDir;
@@ -24,7 +23,7 @@ let
 
       # Filter out non-directories
       moduleDirs =
-        lib.filterAttrs (name: type: type == "directory") categoryContents;
+        lib.filterAttrs (_: type: type == "directory") categoryContents;
 
       # Import each module directory and wrap it with utils.mkModule
       # For features, use the name directly

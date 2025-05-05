@@ -1,4 +1,4 @@
-{ config, lib, pkgs, cfg, ... }: {
+{ pkgs, ... }: {
   # This configuration will only be applied if nixModules.example = true
 
   # Example: Install specific packages
