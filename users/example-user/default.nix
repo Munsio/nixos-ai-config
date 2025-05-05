@@ -1,31 +1,17 @@
-{ pkgs, homeModules, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Import home-modules
   imports = [
     # You can import additional home-manager modules here if needed
+    ../../home-modules/features/example.nix
+    ../../home-modules/bundles/example/default.nix
   ];
-
-  # Enable specific home-manager modules for this user
-  homeModules = {
-    # Enable feature modules (at root level), overriding host-level settings if necessary
-    # example = true;
-
-    # Enable bundle modules
-    bundles = {
-      # example = true;
-    };
-
-    # Enable service modules
-    services = {
-      # media = true;
-    };
-  };
 
   # Home Manager needs a bit of information about you and the paths it should manage
   home = {
     username = "example-user";
-    homeDirectory = "/home/example-user";
+    homeDirectory = lib.mkForce "/home/example-user";
 
     # User-specific packages
     packages = with pkgs; [

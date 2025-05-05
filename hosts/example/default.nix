@@ -18,41 +18,30 @@
     kernelParams = [ "quiet" ];
   };
 
-  # Enable specific NixOS modules for this host
-  nixModules = {
-    # Enable feature modules (at root level)
-    # example = true;
+  # Set console keymap
+  console.keyMap = "us";
 
-    # Enable bundle modules
-    bundles = {
-      # example = true;
-    };
-
-    # Enable service modules
-    services = {
-      # monitoring = true;
-    };
+  # Root filesystem configuration
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
   };
+
+  # Import NixOS modules
+  imports = [
+    ../../modules/features/example.nix
+    ../../modules/bundles/example/default.nix
+  ];
 
   # Home-manager configuration for all users on this host
   home-manager.sharedModules = [
     # This module will be imported for all users on this host
-    ({ pkgs, homeModules, ... }: {
-      # Enable specific home-manager modules for all users on this host
-      homeModules = {
-        # Enable feature modules (at root level)
-        # example = true;
-
-        # Enable bundle modules
-        bundles = {
-          # example = true;
-        };
-
-        # Enable service modules
-        services = {
-          # media = true;
-        };
-      };
+    ({ pkgs, ... }: {
+      # Import home-manager modules
+      imports = [
+        ../../home-modules/features/example.nix
+        ../../home-modules/bundles/example/default.nix
+      ];
 
       # Common home-manager configuration for all users on this host
       home.packages = with pkgs; [ firefox ripgrep ];
@@ -83,7 +72,18 @@
     # Example: Enable bluetooth
     bluetooth.enable = true;
 
-    # Example: Enable OpenGL
-    opengl.enable = true;
+    # Example: Enable graphics
+    graphics.enable = true;
   };
+
+  # User configuration
+  users.users.example-user = {
+    isNormalUser = true;
+    description = "Example User";
+    extraGroups = [ "wheel" "networkmanager" ];
+    group = "example-user";
+  };
+
+  # Create a group for the user
+  users.groups.example-user = { };
 }

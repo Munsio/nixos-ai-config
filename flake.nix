@@ -14,31 +14,26 @@
     let
       inherit (nixpkgs) lib;
 
-      # Import utility functions
-      utils = import ./lib { inherit lib nixpkgs home-manager inputs; };
-
-      # Extract the mkSystem function from utils
-      inherit (utils) mkSystem;
-
       # Available systems
       supportedSystems = [ "x86_64-linux" "aarch64-linux" ];
 
       # Function to generate attributes for each supported system
       forAllSystems = lib.genAttrs supportedSystems;
+
+      # Import the system builder function
+      systemLib =
+        import ./lib/system.nix { inherit lib nixpkgs home-manager inputs; };
+      inherit (systemLib) mkSystem;
+
     in {
       # NixOS configurations for different hosts
       nixosConfigurations = {
-        # Example host configuration
+        # Example host configuration using mkSystem
         example = mkSystem {
           hostname = "example";
           users = [ "example-user" ];
+          extraModules = ./modules/default.nix;
         };
-
-        # Add your actual hosts here
-        # my-laptop = mkSystem {
-        #   hostname = "my-laptop";
-        #   users = [ "alice" "bob" ];
-        # };
       };
 
       # Development shell for working with this flake

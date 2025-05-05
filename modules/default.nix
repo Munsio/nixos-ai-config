@@ -1,8 +1,4 @@
-{ lib, utils ? import ../lib { inherit lib; }
-, moduleUtils ? import ../lib/module-utils.nix { inherit lib; }, ... }:
-
-moduleUtils.createModuleSystem {
-  moduleType = "nix";
-  modulesPath = ./.;
-  mkModuleFunc = utils.mkModule;
+# This file simply re-exports all modules in the directory
+{
+  imports = [ ./features/example.nix ./bundles/example/default.nix ];
 }

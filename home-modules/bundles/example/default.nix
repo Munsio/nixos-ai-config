@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-  # This configuration will only be applied if homeModules.bundles.example = true
+  # Example home-manager bundle module configuration
 
   # Group all home attributes together
   home = {
@@ -22,7 +22,7 @@
         owner = "facebook";
         repo = "create-react-app";
         rev = "v5.0.0";
-        sha256 = "0000000000000000000000000000000000000000000000000000";
+        sha256 = "sha256-vUJbf2Piuovy2BK4hycCU43EZtRSdbLGQmvU6D9vhTg=";
       };
 
       # Configuration files

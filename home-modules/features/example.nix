@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-  # This configuration will only be applied if homeModules.example = true
+  # Example home-manager module configuration
 
   # Group all home attributes together
   home = {
@@ -26,16 +26,18 @@
   # Example: Configure a program
   programs.vscode = {
     enable = true;
-    extensions = with pkgs.vscode-extensions;
-      [
-        # Add extensions here
-        # Example: vscodevim.vim
-      ];
-    userSettings = {
-      "editor.fontSize" = 14;
-      "editor.fontFamily" = "Fira Code, monospace";
-      "editor.formatOnSave" = true;
-      "workbench.colorTheme" = "Default Dark+";
+    profiles.default = {
+      extensions = with pkgs.vscode-extensions;
+        [
+          # Add extensions here
+          # Example: vscodevim.vim
+        ];
+      userSettings = {
+        "editor.fontSize" = 14;
+        "editor.fontFamily" = "Fira Code, monospace";
+        "editor.formatOnSave" = true;
+        "workbench.colorTheme" = "Default Dark+";
+      };
     };
   };
 

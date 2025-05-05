@@ -1,5 +1,5 @@
 { lib, pkgs, ... }: {
-  # This configuration will only be applied if nixModules.bundles.example = true
+  # Example bundle module configuration
 
   # Example: Install a bundle of related packages
   environment.systemPackages = with pkgs; [

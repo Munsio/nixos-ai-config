@@ -23,7 +23,7 @@
   i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
 
   # Configure console keymap
-  console.keyMap = lib.mkDefault "us";
+  console.keyMap = lib.mkDefault "at";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
