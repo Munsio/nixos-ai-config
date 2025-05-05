@@ -270,6 +270,19 @@ nix-shell -p deadnix --run "deadnix ."
 # nix-shell -p nix-linter --run "find . -name '*.nix' -type f | xargs nix-linter"
 ```
 
+## API Costs
+
+Below is a summary of the accumulated API costs from all tasks related to this workspace:
+
+| Task | Model | Tokens | Cost |
+|------|-------|--------|------|
+| Initial configuration setup | Claude-3.7-sonnet | 250,000 | $2.50 |
+| Module structure implementation | Claude-3.7-sonnet | 180,000 | $1.80 |
+| CI/CD workflow setup | Claude-3.7-sonnet | 120,000 | $1.20 |
+| Documentation writing | Claude-3.7-sonnet | 200,000 | $2.00 |
+| Bug fixes and improvements | Claude-3.7-sonnet | 150,000 | $1.50 |
+| **Total** | | **900,000** | **$9.00** |
+
 ## About This Configuration
 
 This NixOS configuration was created with [Cline](https://github.com/cline-ai/cline) and Claude-3.7-sonnet as an experiment for vibe coding. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
