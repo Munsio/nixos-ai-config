@@ -15,14 +15,13 @@ This repository contains a modular NixOS configuration using flakes and home-man
 │   └── example-user/         # Example user configuration
 │       └── default.nix       # User implementation
 ├── modules/                  # NixOS modules
-│   ├── default.nix           # Module loader
+│   ├── README.md             # Module system documentation
 │   ├── features/             # Feature modules (root level)
-│   │   └── example/          # Example feature module
-│   │       └── default.nix   # Module implementation
+│   │   └── cli-tools.nix     # Example feature module installing jq and vim
 │   ├── bundles/              # Bundle modules (nixModules.bundles)
-│   │   └── example/          # Example bundle module
-│   │       └── default.nix   # Module implementation
+│   │   └── development.nix   # Example bundle module
 │   └── services/             # Service modules (nixModules.services)
+│       └── ssh.nix           # Example service module
 └── home-modules/             # Home-manager modules
     ├── default.nix           # Module loader
     ├── features/             # Feature modules (root level)
@@ -70,8 +69,8 @@ NixOS modules are organized into three categories:
 
 #### Adding a Feature Module
 
-1. Create a new directory in the `modules/features` directory, e.g., `modules/features/virtualization`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `modules/features` directory, e.g., `modules/features/virtualization.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host configuration:
 
 ```nix
@@ -84,8 +83,8 @@ nixModules = {
 
 #### Adding a Bundle Module
 
-1. Create a new directory in the `modules/bundles` directory, e.g., `modules/bundles/development`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `modules/bundles` directory, e.g., `modules/bundles/development.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host configuration:
 
 ```nix
@@ -100,8 +99,8 @@ nixModules = {
 
 #### Adding a Service Module
 
-1. Create a new directory in the `modules/services` directory, e.g., `modules/services/monitoring`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `modules/services` directory, e.g., `modules/services/monitoring.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host configuration:
 
 ```nix

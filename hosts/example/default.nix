@@ -27,14 +27,17 @@
     fsType = "ext4";
   };
 
-  # # Enable NixOS modules using nixModules
-  # nixModules = {
-  #   # Enable features
-  #   example = true;
+  # Enable NixOS modules using nixModules
+  nixModules = {
+    # Enable features
+    cli-tools = true;
 
-  #   # Enable bundles
-  #   bundles.example = true;
-  # };
+    # Enable bundles
+    bundles.development = true;
+
+    # Enable services
+    services.ssh = true;
+  };
 
   # System-specific packages
   environment.systemPackages = with pkgs;

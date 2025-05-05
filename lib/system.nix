@@ -1,10 +1,17 @@
-{ lib, inputs }:
+{ lib, inputs, ... }:
 
-{
+let
+
+in {
   # Function to create a NixOS system configuration for a specific host
   mkSystem =
     { hostname, system ? "x86_64-linux", users ? [ ], extraModules ? [ ] }:
-    lib.nixosSystem {
+    let
+      # Import the module system
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
+      moduleLib = import ./modules.nix { inherit lib pkgs; };
+      inherit (moduleLib) mkModuleSystem;
+    in lib.nixosSystem {
       inherit system;
       specialArgs = {
         inherit inputs hostname;
@@ -16,6 +23,13 @@
 
         # Host-specific configuration
         ../hosts/${hostname}/default.nix
+
+        # Module system
+        (mkModuleSystem {
+          featuresDir = ../modules/features;
+          bundlesDir = ../modules/bundles;
+          servicesDir = ../modules/services;
+        })
       ] ++ extraModules;
     };
 }
