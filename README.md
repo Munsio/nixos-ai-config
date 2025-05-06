@@ -202,6 +202,29 @@ This flake provides a development shell with useful tools:
 nix develop
 ```
 
+### Comparing Changes
+
+Before applying a new configuration, you can compare the changes that would be made to your current system:
+
+```bash
+# Show a diff of what would change in your system configuration
+nixos-rebuild build --flake .#$(hostname) --dry-run
+
+# Show a more detailed diff including what would be added/removed from your system
+nixos-rebuild build --flake .#$(hostname) --dry-activate
+
+# Compare the current system closure with the new one
+nix store diff-closures /run/current-system ./result
+
+# List the dependencies of the new system configuration
+nix-store -q --references ./result
+
+# Show what packages would be installed/removed for a specific user
+home-manager build --flake .#$(hostname) --dry-run
+```
+
+These commands help you understand the impact of your changes before applying them, which is especially useful when making significant modifications to your system configuration.
+
 ## Customization
 
 ### Host-Specific Configuration
@@ -261,7 +284,7 @@ Recent updates to the repository include:
 
 As it is not possible for Cline to read its own history yet, the costs have to be tracked manually.
 
-Currently the costs are at approximately $15.
+Currently the costs are at approximately $18.
 
 ## About This Configuration
 
