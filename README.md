@@ -271,16 +271,9 @@ nix-shell -p deadnix --run "deadnix ."
 
 ## API Costs
 
-Below is a summary of the accumulated API costs from all tasks related to this workspace:
+As it is not possible for Cline to read its own history yet the costs I have to do it manually.
 
-| Task | Model | Tokens | Cost |
-|------|-------|--------|------|
-| Initial configuration setup | Claude-3.7-sonnet | 250,000 | $2.50 |
-| Module structure implementation | Claude-3.7-sonnet | 180,000 | $1.80 |
-| CI/CD workflow setup | Claude-3.7-sonnet | 120,000 | $1.20 |
-| Documentation writing | Claude-3.7-sonnet | 200,000 | $2.00 |
-| Bug fixes and improvements | Claude-3.7-sonnet | 150,000 | $1.50 |
-| **Total** | | **900,000** | **$9.00** |
+Currently the costs are at ~ 15$
 
 ## About This Configuration
 
