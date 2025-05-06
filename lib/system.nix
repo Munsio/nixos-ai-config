@@ -22,7 +22,7 @@ in {
 
       # Generate user modules if users are specified
       userModules = if users != [ ] then
-        map (user: ../users/${user}/default.nix) users
+        lib.attrValues (lib.genAttrs users (user: ../users/${user}/default.nix))
       else
         [ ];
 
