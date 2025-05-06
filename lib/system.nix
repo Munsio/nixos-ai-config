@@ -20,11 +20,9 @@ in {
       # Import host variables (mandatory)
       hostVars = import ../hosts/${hostname}/variables.nix;
 
-      # Generate user modules if users are specified
-      userModules = if users != [ ] then
-        lib.attrValues (lib.genAttrs users (user: ../users/${user}/default.nix))
-      else
-        [ ];
+      # Generate user modules
+      userModules = lib.attrValues
+        (lib.genAttrs users (user: ../users/${user}/default.nix));
 
       # Home Manager configuration
       homeManagerModule = inputs.home-manager.nixosModules.home-manager;
