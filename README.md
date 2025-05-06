@@ -288,6 +288,6 @@ Currently the costs are at approximately $18.
 
 ## About This Configuration
 
-This NixOS configuration was created entirely with [Cline](https://github.com/cline-ai/cline) and Claude-3.7-sonnet as an experiment for AI-assisted system configuration. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
+This NixOS configuration was created entirely with [Cline](https://github.com/cline-ai/cline), Claude-3.7-sonnet, and Gemini 2.5 Pro as an experiment for AI-assisted system configuration. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
 
 All code, documentation, and configuration in this repository was generated with AI assistance, showcasing the potential of AI-driven system configuration management.
