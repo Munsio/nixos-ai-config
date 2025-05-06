@@ -338,7 +338,7 @@ Recent updates to the repository include:
 
 As it is not possible for Cline to read its own history yet, the costs have to be tracked manually.
 
-Currently the costs are at approximately $18.
+Currently the costs are at approximately $35.
 
 ## Inspiration and Thanks
 
