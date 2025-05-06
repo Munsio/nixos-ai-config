@@ -26,11 +26,18 @@ let
           let
             # Remove .nix extension
             moduleName = lib.removeSuffix ".nix" name;
-            # Import the module and call it with lib and pkgs if it's a function
+            # Import the module
             imported = import (dir + "/${name}");
+            # Check if the function expects arguments
             module =
               if builtins.isFunction imported then
-                imported { inherit lib pkgs; }
+              # Check the number of arguments the function expects
+                if builtins.functionArgs imported == { } then
+                # If it expects no arguments, call it with an empty set
+                  imported { }
+                else
+                # Otherwise, call it with lib and pkgs
+                  imported { inherit lib pkgs; }
               else
                 imported;
           in

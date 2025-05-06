@@ -1,4 +1,4 @@
-{}:
+{ ... }:
 
 {
   # Enable development-related features
