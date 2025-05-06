@@ -7,17 +7,6 @@
     networkmanager.enable = true;
   };
 
-  # Hardware configuration
-  boot = {
-    # Example boot loader configuration
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    # Example kernel parameters
-    kernelParams = [ "quiet" ];
-  };
-
   # Set console keymap
   console.keyMap = "us";
 
@@ -31,6 +20,7 @@
   nixModules = {
     # Enable features
     cli-tools = false;
+    systemd-boot = true;
 
     # Enable bundles
     bundles.development = false;
