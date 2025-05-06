@@ -7,9 +7,6 @@
     networkmanager.enable = true;
   };
 
-  # Set console keymap
-  console.keyMap = "us";
-
   # Root filesystem configuration
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";

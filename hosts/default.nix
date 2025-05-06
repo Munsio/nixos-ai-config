@@ -3,17 +3,10 @@
 {
   # Common configuration for all hosts
 
-  # Enable flakes and nix-command
-  nix = {
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      warn-dirty = false;
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
+  # Enable NixOS modules
+  nixModules = {
+    # Enable features
+    nixos = true;
   };
 
   # Set your time zone
@@ -25,20 +18,8 @@
   # Configure console keymap
   console.keyMap = lib.mkDefault hostVars.keyboardLayout;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # Basic packages for all systems
   environment.systemPackages = with pkgs; [ vim wget git curl ];
-
-  # Enable the OpenSSH daemon
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
-  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software.
