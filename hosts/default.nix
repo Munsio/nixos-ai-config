@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, hostVars, ... }:
 
 {
   # Common configuration for all hosts
@@ -17,13 +17,13 @@
   };
 
   # Set your time zone
-  time.timeZone = lib.mkDefault "UTC";
+  time.timeZone = lib.mkDefault hostVars.timezone;
 
   # Select internationalisation properties
-  i18n.defaultLocale = lib.mkDefault "en_US.UTF-8";
+  i18n.defaultLocale = lib.mkDefault hostVars.locale;
 
   # Configure console keymap
-  console.keyMap = lib.mkDefault "at";
+  console.keyMap = lib.mkDefault hostVars.keyboardLayout;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -42,5 +42,5 @@
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software.
-  system.stateVersion = lib.mkDefault "23.11";
+  system.stateVersion = lib.mkDefault hostVars.stateVersion;
 }

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, hostVars, ... }:
 
 {
   # Home Manager configuration for example-user
@@ -23,7 +23,7 @@
     # configuration is compatible with. This helps avoid breakage
     # when a new Home Manager release introduces backwards
     # incompatible changes.
-    stateVersion = "23.11";
+    stateVersion = hostVars.stateVersion;
   };
 
   # Enable homeModules
