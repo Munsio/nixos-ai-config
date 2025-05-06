@@ -286,6 +286,16 @@ As it is not possible for Cline to read its own history yet, the costs have to b
 
 Currently the costs are at approximately $18.
 
+## Inspiration and Thanks
+
+This NixOS configuration structure was inspired by the work of several community members. A special thanks to:
+
+- [anotherhadi](https://github.com/anotherhadi) for their [nixy](https://github.com/anotherhadi/nixy) project.
+- [Misterio77](https://github.com/Misterio77) for their [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs).
+- [vimjoyer](https://github.com/vimjoyer) for their [nixconf](https://github.com/vimjoyer/nixconf).
+
+Their repositories provided valuable insights and ideas for organizing a modular NixOS setup.
+
 ## About This Configuration
 
 This NixOS configuration was created entirely with [Cline](https://github.com/cline-ai/cline), Claude-3.7-sonnet, and Gemini 2.5 Pro as an experiment for AI-assisted system configuration. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
