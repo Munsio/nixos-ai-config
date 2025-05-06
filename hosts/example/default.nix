@@ -21,6 +21,7 @@
 
     # Enable bundles
     bundles.development = false;
+    bundles.automount = true;
 
     # Enable services
     services.ssh = false;
