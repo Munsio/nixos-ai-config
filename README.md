@@ -62,6 +62,60 @@ nixosConfigurations = {
 };
 ```
 
+#### Using `extraModules` and `extraHomeManagerModules` with `mkSystem`
+
+The `mkSystem` function, used in `flake.nix` to define your NixOS configurations, accepts `extraModules` and `extraHomeManagerModules` parameters. These allow you to include additional NixOS and Home Manager modules directly at the system definition level. This is particularly useful for applying system-wide or user-wide configurations that are not part of the standard module structure or for including modules from external flakes or local paths.
+
+**`extraModules`**: A list of NixOS modules to be included in the system configuration.
+**`extraHomeManagerModules`**: A list of Home Manager modules to be included for all users on that system. These modules will be applied globally to every user's Home Manager configuration on this specific host, unless overridden at the user level.
+
+Example:
+
+```nix
+# In flake.nix
+# Ensure you have 'inputs' available in the scope where mkSystem is called.
+# For example, if flake.nix's outputs function is: outputs = { self, nixpkgs, home-manager, zen-browser-flake, ... }@inputs:
+# Then you can reference inputs.zen-browser-flake.
+
+nixosConfigurations = {
+  my-server = mkSystem {
+    hostname = "my-server";
+    users = [ "admin" "service-user" ];
+    # Pass flake inputs to mkSystem if they are needed by extraModules
+    # or extraHomeManagerModules that refer to other flake inputs.
+    # This depends on how mkSystem is defined in lib/system.nix.
+    # Assuming mkSystem passes 'inputs' through or makes them available:
+    inherit inputs; # Or pass specific inputs: zen-browser-flake = inputs.zen-browser-flake;
+
+
+    # Add extra NixOS modules
+    extraModules = [
+      # Include a custom NixOS module from a local path
+      ./path/to/custom-nixos-module.nix
+      # You could also include modules from other flakes if needed
+      # e.g., inputs.another-flake.nixosModules.someModule
+    ];
+
+    # Add extra Home Manager modules for all users on this system
+    extraHomeManagerModules = [
+      # Include a custom Home Manager module from a local path
+      ./path/to/custom-home-manager-module.nix
+
+      # Include a Home Manager module from an external flake input
+      inputs.zen-browser-flake.homeManagerModules.default
+    ];
+  };
+
+  my-laptop = mkSystem {
+    hostname = "my-laptop";
+    users = [ "alice" ];
+    # This host does not use extraModules or extraHomeManagerModules
+  };
+};
+```
+
+These extra modules are merged with the modules defined in `hosts/<hostname>/default.nix` and `users/<username>/home.nix` respectively. Make sure that the paths to local modules are correct relative to your `flake.nix` and that any flake inputs (like `inputs.zen-browser-flake`) are correctly defined in your `flake.nix` and passed to or accessible by `mkSystem` if needed.
+
 ### Adding a New User
 
 1. Create a new directory in the `users` directory, e.g., `users/alice`
