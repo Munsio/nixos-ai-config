@@ -23,7 +23,8 @@
       systemLib = import ./lib/system.nix { inherit lib inputs; };
       inherit (systemLib) mkSystem;
 
-    in {
+    in
+    {
       # NixOS configurations for different hosts
       nixosConfigurations = {
         # Example host configuration using mkSystem

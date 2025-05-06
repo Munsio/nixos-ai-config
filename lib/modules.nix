@@ -14,52 +14,61 @@ let
 
       # Filter out non-Nix files and directories
       nixFiles = lib.filterAttrs
-        (name: type: type == "regular" && lib.hasSuffix ".nix" name) entries;
+        (name: type: type == "regular" && lib.hasSuffix ".nix" name)
+        entries;
 
       # Filter directories
       dirs = lib.filterAttrs (name: type: type == "directory") entries;
 
       # Import each Nix file
-      modules = lib.mapAttrs' (name: _:
-        let
-          # Remove .nix extension
-          moduleName = lib.removeSuffix ".nix" name;
-          # Import the module and call it with lib and pkgs if it's a function
-          imported = import (dir + "/${name}");
-          module = if builtins.isFunction imported then
-            imported { inherit lib pkgs; }
-          else
-            imported;
-        in lib.nameValuePair moduleName module) nixFiles;
+      modules = lib.mapAttrs'
+        (name: _:
+          let
+            # Remove .nix extension
+            moduleName = lib.removeSuffix ".nix" name;
+            # Import the module and call it with lib and pkgs if it's a function
+            imported = import (dir + "/${name}");
+            module =
+              if builtins.isFunction imported then
+                imported { inherit lib pkgs; }
+              else
+                imported;
+          in
+          lib.nameValuePair moduleName module)
+        nixFiles;
 
       # Recursively import directories
       nestedModules = lib.mapAttrs'
-        (name: _: lib.nameValuePair name (importDir (dir + "/${name}"))) dirs;
+        (name: _: lib.nameValuePair name (importDir (dir + "/${name}")))
+        dirs;
       # Merge modules and nested modules
-    in modules // nestedModules;
+    in
+    modules // nestedModules;
 
   # Function to create a module with enable option
   mkModule =
     { name, description, module, type ? moduleTypes.nix, category ? null }:
     { config, lib, ... }: {
-      options = if category != null then {
-        ${type}.${category}.${name} = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = description;
+      options =
+        if category != null then {
+          ${type}.${category}.${name} = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = description;
+          };
+        } else {
+          ${type}.${name} = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = description;
+          };
         };
-      } else {
-        ${type}.${name} = lib.mkOption {
-          type = lib.types.bool;
-          default = false;
-          description = description;
-        };
-      };
 
-      config = if category != null then
-        lib.mkIf config.${type}.${category}.${name} module
-      else
-        lib.mkIf config.${type}.${name} module;
+      config =
+        if category != null then
+          lib.mkIf config.${type}.${category}.${name} module
+        else
+          lib.mkIf config.${type}.${name} module;
     };
 
   # Function to create modules from a directory
@@ -69,16 +78,20 @@ let
       modules = importDir dir;
 
       # Convert each module to a proper module with enable option
-      modulesList = lib.mapAttrsToList (name: module:
-        mkModule {
-          inherit name;
-          inherit description;
-          inherit module;
-          inherit type;
-          inherit category;
-        }) modules;
-    in modulesList;
-in {
+      modulesList = lib.mapAttrsToList
+        (name: module:
+          mkModule {
+            inherit name;
+            inherit description;
+            inherit module;
+            inherit type;
+            inherit category;
+          })
+        modules;
+    in
+    modulesList;
+in
+{
   inherit moduleTypes;
 
   # Function to create a module system (nixModules or homeModules)
@@ -107,7 +120,8 @@ in {
         category = "services";
       };
       # Base module that sets up the module options
-    in { config, lib, ... }: {
+    in
+    { config, lib, ... }: {
       options.${type} = {
         features = lib.mkOption {
           type = lib.types.attrsOf lib.types.bool;
