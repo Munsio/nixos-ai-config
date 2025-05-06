@@ -1,4 +1,4 @@
-{ pkgs, hostname, inputs, ... }:
+{ pkgs, hostname, ... }:
 
 {
   # Host-specific configuration for 'example'

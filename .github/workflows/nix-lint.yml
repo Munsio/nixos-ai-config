@@ -32,7 +32,7 @@ jobs:
 
       - name: Run deadnix check
         run: |
-          nix-shell -p deadnix --run "deadnix ."
+          nix-shell -p deadnix --run "deadnix --fail ."
         continue-on-error: false
         
       # nix-linter is currently marked as broken in nixpkgs

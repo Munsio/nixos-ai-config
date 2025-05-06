@@ -18,7 +18,7 @@ let
         entries;
 
       # Filter directories
-      dirs = lib.filterAttrs (name: type: type == "directory") entries;
+      dirs = lib.filterAttrs (_: type: type == "directory") entries;
 
       # Import each Nix file
       modules = lib.mapAttrs'
@@ -54,13 +54,13 @@ let
           ${type}.${category}.${name} = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = description;
+            inherit description;
           };
         } else {
           ${type}.${name} = lib.mkOption {
             type = lib.types.bool;
             default = false;
-            description = description;
+            inherit description;
           };
         };
 
@@ -121,7 +121,7 @@ in
       };
       # Base module that sets up the module options
     in
-    { config, lib, ... }: {
+    { lib, ... }: {
       options.${type} = {
         features = lib.mkOption {
           type = lib.types.attrsOf lib.types.bool;

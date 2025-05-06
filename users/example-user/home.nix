@@ -1,4 +1,4 @@
-{ pkgs, lib, hostname, ... }:
+{ pkgs, ... }:
 
 {
   # Home Manager configuration for example-user
