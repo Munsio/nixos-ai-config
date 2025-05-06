@@ -1,36 +1,45 @@
-# NixOS Configuration with Flakes and Home-Manager
+# NixOS Configuration with Flakes and Home-Manager (AI-Built)
 
-This repository contains a modular NixOS configuration using flakes and home-manager. It supports multiple hosts and users, with a flexible module system for both NixOS and home-manager configurations.
+This repository contains a modular NixOS configuration using flakes and home-manager, built entirely with AI assistance. It supports multiple hosts and users, with a flexible module system for both NixOS and home-manager configurations.
 
 ## Structure
+
+The current repository structure:
 
 ```
 .
 ├── flake.nix                 # Main flake configuration
+├── flake.lock                # Flake lock file
+├── shell.nix                 # Development shell configuration
+├── statix.toml               # Statix linter configuration
 ├── hosts                     # Host-specific configurations
 │   ├── default.nix           # Common host configuration
 │   └── example/              # Example host configuration
-│       └── default.nix       # Host implementation
+│       ├── default.nix       # Host implementation
+│       └── home.nix          # Host-specific home configuration
 ├── users                     # User-specific configurations
 │   └── example-user/         # Example user configuration
-│       └── default.nix       # User implementation
+│       ├── default.nix       # User implementation
+│       └── home.nix          # User home configuration
 ├── modules/                  # NixOS modules
 │   ├── README.md             # Module system documentation
 │   ├── features/             # Feature modules (root level)
-│   │   └── cli-tools.nix     # Example feature module installing jq and vim
+│   │   └── cli-tools.nix     # Example feature module installing CLI tools
 │   ├── bundles/              # Bundle modules (nixModules.bundles)
 │   │   └── development.nix   # Example bundle module
 │   └── services/             # Service modules (nixModules.services)
 │       └── ssh.nix           # Example service module
-└── home-modules/             # Home-manager modules
-    ├── default.nix           # Module loader
-    ├── features/             # Feature modules (root level)
-    │   └── example/          # Example feature module
-    │       └── default.nix   # Module implementation
-    ├── bundles/              # Bundle modules (homeModules.bundles)
-    │   └── example/          # Example bundle module
-    │       └── default.nix   # Module implementation
-    └── services/             # Service modules (homeModules.services)
+├── home/                     # Home-manager modules
+│   ├── README.md             # Home module system documentation
+│   ├── features/             # Feature modules (root level)
+│   │   └── git.nix           # Git configuration module
+│   ├── bundles/              # Bundle modules (homeModules.bundles)
+│   │   └── development.nix   # Development bundle module
+│   └── services/             # Service modules (homeModules.services)
+│       └── ssh.nix           # SSH service module
+└── lib/                      # Library functions
+    ├── modules.nix           # Module system implementation
+    └── system.nix            # System configuration helpers
 ```
 
 ## Usage
@@ -56,7 +65,9 @@ nixosConfigurations = {
 ### Adding a New User
 
 1. Create a new directory in the `users` directory, e.g., `users/alice`
-2. Create a `default.nix` file in this directory with your user-specific home-manager configuration
+2. Create two configuration files in this directory:
+   - `default.nix`: Contains NixOS-specific user configuration (user account, permissions, groups)
+   - `home.nix`: Contains home-manager related configuration (dotfiles, user environment)
 3. Add the user to the appropriate host configuration in `flake.nix`
 
 ### Adding a NixOS Module
@@ -123,22 +134,12 @@ Home-manager modules follow the same categorization as NixOS modules:
 
 #### Adding a Feature Module
 
-1. Create a new directory in the `home-modules/features` directory, e.g., `home-modules/features/development`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `home/features` directory, e.g., `home/features/development.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host or user configuration:
 
 ```nix
-# In hosts/my-laptop/default.nix (for all users on this host)
-home-manager.sharedModules = [
-  ({ config, ... }: {
-    homeModules = {
-      # Enable the feature module directly at root level
-      development = true;
-    };
-  })
-];
-
-# OR in users/alice/default.nix (for a specific user)
+# Can be used in hosts/my-laptop/home.nix or users/alice/home.nix
 homeModules = {
   # Enable the feature module directly at root level
   development = true;
@@ -147,24 +148,12 @@ homeModules = {
 
 #### Adding a Bundle Module
 
-1. Create a new directory in the `home-modules/bundles` directory, e.g., `home-modules/bundles/coding`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `home/bundles` directory, e.g., `home/bundles/coding.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host or user configuration:
 
 ```nix
-# In hosts/my-laptop/default.nix (for all users on this host)
-home-manager.sharedModules = [
-  ({ config, ... }: {
-    homeModules = {
-      bundles = {
-        # Enable the bundle module in the bundles section
-        coding = true;
-      };
-    };
-  })
-];
-
-# OR in users/alice/default.nix (for a specific user)
+# Can be used in hosts/my-laptop/home.nix or users/alice/home.nix
 homeModules = {
   bundles = {
     # Enable the bundle module in the bundles section
@@ -175,24 +164,12 @@ homeModules = {
 
 #### Adding a Service Module
 
-1. Create a new directory in the `home-modules/services` directory, e.g., `home-modules/services/media`
-2. Create a `default.nix` file in this directory with your module configuration
+1. Create a new `.nix` file in the `home/services` directory, e.g., `home/services/media.nix`
+2. Add your module configuration to this file
 3. Enable the module in a host or user configuration:
 
 ```nix
-# In hosts/my-laptop/default.nix (for all users on this host)
-home-manager.sharedModules = [
-  ({ config, ... }: {
-    homeModules = {
-      services = {
-        # Enable the service module in the services section
-        media = true;
-      };
-    };
-  })
-];
-
-# OR in users/alice/default.nix (for a specific user)
+# Can be used in hosts/my-laptop/home.nix or users/alice/home.nix
 homeModules = {
   services = {
     # Enable the service module in the services section
@@ -269,12 +246,25 @@ nix-shell -p deadnix --run "deadnix ."
 # nix-shell -p nix-linter --run "find . -name '*.nix' -type f | xargs nix-linter"
 ```
 
+## Recent Changes
+
+Recent updates to the repository include:
+
+1. Reorganized the home-manager modules from `home-modules/` to `home/` for better consistency
+2. Added specific home configuration files for hosts (`hosts/example/home.nix`)
+3. Added Git configuration module in `home/features/git.nix`
+4. Added SSH service modules for both NixOS and home-manager
+5. Improved the module system implementation in `lib/modules.nix` and `lib/system.nix`
+6. Added CI/CD workflow for Nix linting
+
 ## API Costs
 
-As it is not possible for Cline to read its own history yet the costs I have to do it manually.
+As it is not possible for Cline to read its own history yet, the costs have to be tracked manually.
 
-Currently the costs are at ~ 15$
+Currently the costs are at approximately $15.
 
 ## About This Configuration
 
-This NixOS configuration was created with [Cline](https://github.com/cline-ai/cline) and Claude-3.7-sonnet as an experiment for vibe coding. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
+This NixOS configuration was created entirely with [Cline](https://github.com/cline-ai/cline) and Claude-3.7-sonnet as an experiment for AI-assisted system configuration. The modular structure and organization of this configuration demonstrates how AI assistants can help create well-structured, maintainable NixOS configurations with clear separation of concerns between different types of modules (features, bundles, and services).
+
+All code, documentation, and configuration in this repository was generated with AI assistance, showcasing the potential of AI-driven system configuration management.
