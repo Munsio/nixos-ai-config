@@ -7,6 +7,7 @@
   nixModules = {
     # Enable features
     nixos = true;
+    nh = true;
   };
 
   # Set your time zone
