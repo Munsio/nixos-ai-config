@@ -1,21 +1,17 @@
 { lib, inputs, ... }:
 
 let
-  # Import the module system
-  moduleLib = import ./modules.nix {
-    inherit lib;
-    pkgs = null;
-  };
-  inherit (moduleLib) moduleTypes;
 in {
   # Function to create a NixOS system configuration for a specific host
   mkSystem = { hostname, system ? "x86_64-linux", users ? [ ]
-    , extraModules ? [ ], homeManagerConfig ? null }:
+    , extraModules ? [ ]
+    , extraHomeManagerModules ? [ ] # Added argument with default
+    , homeManagerConfig ? null }:
     let
       # Import the module system
       pkgs = inputs.nixpkgs.legacyPackages.${system};
-      moduleLib = import ./modules.nix { inherit lib pkgs; };
-      inherit (moduleLib) mkModuleSystem;
+      moduleLib = import ./modules.nix { inherit inputs lib pkgs; };
+      inherit (moduleLib) mkModuleSystem moduleTypes;
 
       # Import host variables (mandatory)
       hostVars = import ../hosts/${hostname}/variables.nix;
@@ -44,7 +40,8 @@ in {
           # Load user-specific home-manager configurations
           users = lib.genAttrs users (user: {
             imports =
-              [ ../hosts/${hostname}/home.nix ../users/${user}/home.nix ];
+              [ ../hosts/${hostname}/home.nix ../users/${user}/home.nix ]
+              ++ extraHomeManagerModules; # Appended here
           });
         };
       };

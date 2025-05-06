@@ -7,6 +7,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser-flake = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs"; # Assuming it might need nixpkgs
+    };
   };
 
   outputs = { nixpkgs, ... }@inputs:
@@ -20,17 +24,20 @@
       forAllSystems = lib.genAttrs supportedSystems;
 
       # Import the system builder function
-      systemLib = import ./lib/system.nix { inherit lib inputs; };
+      systemLib = import ./lib/system.nix {
+        inherit lib inputs;
+      }; # inputs here will include zen-browser-flake
       inherit (systemLib) mkSystem;
 
-    in
-    {
+    in {
       # NixOS configurations for different hosts
       nixosConfigurations = {
         # Example host configuration using mkSystem
         example = mkSystem {
           hostname = "example";
           users = [ "example-user" ];
+          extraHomeManagerModules =
+            [ inputs.zen-browser-flake.homeModules.twilight ];
         };
       };
 

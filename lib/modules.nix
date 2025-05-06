@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 
 let
   # Define module types
@@ -34,7 +34,7 @@ let
               imported { }
             else
             # Otherwise, call it with lib and pkgs
-              imported { inherit lib pkgs; }
+              imported { inherit inputs lib pkgs; }
           else
             imported;
         in lib.nameValuePair moduleName module) nixFiles;

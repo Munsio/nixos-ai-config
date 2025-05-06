@@ -7,7 +7,7 @@
     networkmanager.enable = true;
   };
 
-  # Root filesystem configuration
+  # Replace this one with your hardware-configuration.nix, but it is required to build and test this configuraiton.
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
@@ -32,26 +32,4 @@
     [
       # Add host-specific packages here
     ];
-
-  # Enable specific services for this host
-  services = {
-    # Example: Enable CUPS for printing
-    printing.enable = true;
-
-    # Example: Enable sound
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      pulse.enable = true;
-    };
-  };
-
-  # Hardware-specific settings
-  hardware = {
-    # Example: Enable bluetooth
-    bluetooth.enable = true;
-
-    # Example: Enable graphics
-    graphics.enable = true;
-  };
 }

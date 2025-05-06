@@ -11,39 +11,33 @@
     username = "example-user";
     homeDirectory = "/home/example-user";
 
-    # Packages installed to user profile
-    packages = with pkgs; [
-      # User-specific packages
-      firefox
-      thunderbird
-      vlc
-    ];
-
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
     # when a new Home Manager release introduces backwards
     # incompatible changes.
     stateVersion = hostVars.stateVersion;
+
+    # Packages installed to user profile
+    packages = with pkgs;
+      [
+        # User-specific packages
+        #firefox
+        #thunderbird
+        #vlc
+      ];
+
   };
 
   # Enable homeModules
   homeModules = {
     # Enable features
-    git = true;
+    # git = true;
+    zen-browser = true;
 
     # Enable bundles
-    bundles.development = true;
+    # bundles.development = true;
 
     # Enable services
-    services.ssh = true;
-  };
-
-  # Additional user-specific configuration
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      ll = "ls -la";
-      update = "sudo nixos-rebuild switch";
-    };
+    # services.ssh = true;
   };
 }
