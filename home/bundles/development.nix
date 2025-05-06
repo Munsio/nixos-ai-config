@@ -8,6 +8,6 @@
   home.packages = with pkgs;
     [
       # Development tools
-      dolphin
+      kdePackages.dolphin
     ];
 }

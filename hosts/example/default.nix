@@ -33,7 +33,7 @@
     cli-tools = false;
 
     # Enable bundles
-    bundles.development = true;
+    bundles.development = false;
 
     # Enable services
     services.ssh = false;

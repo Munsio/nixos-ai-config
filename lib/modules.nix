@@ -39,19 +39,32 @@ let
     in modules // nestedModules;
 
   # Function to create a module with enable option
-  mkModule = { name, description, module, type ? moduleTypes.nix }:
+  mkModule =
+    { name, description, module, type ? moduleTypes.nix, category ? null }:
     { config, lib, ... }: {
-      options.${type}.${name} = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = description;
+      options = if category != null then {
+        ${type}.${category}.${name} = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = description;
+        };
+      } else {
+        ${type}.${name} = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = description;
+        };
       };
 
-      config = lib.mkIf config.${type}.${name} module;
+      config = if category != null then
+        lib.mkIf config.${type}.${category}.${name} module
+      else
+        lib.mkIf config.${type}.${name} module;
     };
 
   # Function to create modules from a directory
-  mkModulesFromDir = { dir, description, type ? moduleTypes.nix }:
+  mkModulesFromDir =
+    { dir, description, type ? moduleTypes.nix, category ? null }:
     let
       modules = importDir dir;
 
@@ -62,6 +75,7 @@ let
           inherit description;
           inherit module;
           inherit type;
+          inherit category;
         }) modules;
     in modulesList;
 in {
@@ -76,18 +90,21 @@ in {
         dir = featuresDir;
         description = "Enable this feature";
         inherit type;
+        category = null; # Features are at the root level
       };
 
       bundleModules = mkModulesFromDir {
         dir = bundlesDir;
         description = "Enable this bundle";
         inherit type;
+        category = "bundles";
       };
 
       serviceModules = mkModulesFromDir {
         dir = servicesDir;
         description = "Enable this service";
         inherit type;
+        category = "services";
       };
       # Base module that sets up the module options
     in { config, lib, ... }: {
@@ -99,13 +116,13 @@ in {
         };
 
         bundles = lib.mkOption {
-          type = lib.types.attrsOf lib.types.bool;
+          type = lib.types.submodule { options = { }; };
           default = { };
           description = "Bundles to enable";
         };
 
         services = lib.mkOption {
-          type = lib.types.attrsOf lib.types.bool;
+          type = lib.types.submodule { options = { }; };
           default = { };
           description = "Services to enable";
         };
